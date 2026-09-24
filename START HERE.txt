@@ -1,0 +1,111 @@
+TG DataBridge (TM)  -  Connecting Legacy Data to the Future
+Build R35, 17 September 2026.
+
+This build was made in direct response to "Apply DDL to Target" getting
+past every previous fix and then stopping on the next problem in the
+same script: a WHEN clause naming a user-declared Oracle EXCEPTION.
+
+
+READY TO RUN RIGHT NOW - NO COPYING NEEDED
+------------------------------------------
+These folders already have the new build in place. Just double-click
+the .exe - nothing to copy, nothing to unzip:
+
+  C:\Users\Priti.kamble.TELEGLOBALS\Downloads\
+  Teleglobal-TDMT-Windows-Package (1)\Teleglobal-TDMT-Windows-Package\App\
+  TG DataBridge.exe
+
+  C:\Users\Priti.kamble.TELEGLOBALS\Downloads\
+  Teleglobal-TDMT-Windows-Package (2)\Teleglobal-TDMT-Windows-Package\App\
+  TG DataBridge.exe
+
+  C:\Users\Priti.kamble.TELEGLOBALS\OneDrive - Teleglobal International\
+  Desktop\migration tool\App\TG DataBridge.exe
+
+  C:\Users\Priti.kamble.TELEGLOBALS\OneDrive - Teleglobal International\
+  Desktop\New folder\1509\TG DataBridge.exe
+
+The old "Teleglobal Database Migration Tool.exe" is still sitting beside
+the one in package (1). It still runs - it is an old build - so if you
+launch it by habit you will get the old name and none of the fixes below.
+
+
+HOW TO CHECK YOU ARE RUNNING R35
+---------------------------------
+The title bar now reads:
+
+    TG DataBridge(TM)  -  Connecting Legacy Data to the Future  -  build R35 (2026-09-17)
+
+If it says "build R34" or earlier, you are on the previous .exe and can
+still hit the bug described below.
+
+IMPORTANT - please don't skip this: "3. Apply DDL to Target" applies
+whatever DDL is already sitting in the "Generated DDL" tab - it does NOT
+regenerate it. Upgrading the .exe alone changes nothing you apply from
+that tab. Every time you switch to a new build, click "2. Convert Schema"
+again FIRST, then "3. Apply DDL to Target".
+
+
+BUG 1 - "APPLY DDL TO TARGET" FAILED: unrecognized exception condition - NOW FIXED
+-------------------------------------------------------------------------------------
+Oracle's `e_invalid_status EXCEPTION;` declares an exception local to the
+routine, later both raised (`RAISE e_invalid_status;`) and caught by name
+(`EXCEPTION WHEN e_invalid_status THEN ...`). An earlier round already
+rewrote the RAISE side; nothing had ever touched the WHEN side. Postgres
+has no user-defined exception type at all, only SQLSTATE condition
+codes, so it tried to parse "e_invalid_status" itself as a real
+condition name and rejected the entire function/procedure outright with
+"unrecognized exception condition" -- a compile-time failure, not a
+runtime one. Every routine declaring, raising, and catching its own
+named exception failed "Apply DDL to Target" the moment it got this far.
+
+This build makes both sides agree on a synthetic SQLSTATE code minted
+per declared exception: `RAISE e_invalid_status;` becomes
+`RAISE EXCEPTION 'e_invalid_status' USING ERRCODE = 'U0001';`, and
+`WHEN e_invalid_status THEN` becomes `WHEN SQLSTATE 'U0001' THEN`. Two
+different exceptions declared in the same routine get two different
+codes, so multiple WHEN clauses still branch correctly.
+
+MySQL, SQL Server and Db2 needed no change -- all three already handle
+this case correctly (a real mapping or a clear flag), so this was a
+PostgreSQL-only gap.
+
+Re-running "Apply DDL to Target" on this build (after re-running "2.
+Convert Schema" first - see above) picks up from where it left off. Any
+other routine declaring, raising, and catching its own named exception
+anywhere in the schema is covered by this same fix.
+
+
+WHAT WAS CHANGED THIS ROUND
+----------------------------
+  * Fixed: "Apply DDL to Target" failing with "unrecognized exception
+    condition" on a WHEN clause naming a user-declared EXCEPTION, for a
+    PostgreSQL target -- both RAISE and WHEN now agree on a synthetic
+    SQLSTATE code per declared exception.
+
+Full detail is in WHATS-FIXED.md, "Round 35", newest first (Round 34's
+gap-analysis PL/SQL conversions are directly below this entry there).
+
+
+HOW THIS BUILD WAS CHECKED
+----------------------------
+  * 2316 unit tests pass, 37 skipped (7 new this round: RAISE and WHEN
+    agreeing on the same code, the exact reported bug shape, two
+    distinct exceptions in one routine getting distinct codes, the
+    severity change from error to warning, a no-declared-exceptions
+    regression guard, and a flattened multi-member package scoping
+    codes independently per member).
+  * Verified directly against the actual shipped .exe's own bytecode.
+  * The tls_live.py, rebrand_live.py, and ai_live.py suites from previous
+    rounds still pass on every substantive check.
+  * repack.py --verify-roundtrip still reproduces the previous build byte
+    for byte with no replacements.
+
+
+RUNNING FROM SOURCE INSTEAD (optional)
+-----------------------------------------
+  unzip Source-Code.zip
+  pip install -r requirements.txt
+  python main.py
+
+  Tests:  python -m pytest        (2316 pass, 37 skipped)

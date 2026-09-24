@@ -1,0 +1,54 @@
+[
+  {
+    "id": "basic_proc",
+    "kind": "PROCEDURE",
+    "name": "GREET",
+    "schema": "HR"
+  },
+  {
+    "id": "function_with_exceptions",
+    "kind": "FUNCTION",
+    "name": "SAFE_DIV",
+    "schema": "HR"
+  },
+  {
+    "id": "trigger_after_row",
+    "kind": "TRIGGER",
+    "name": "TRG_BALANCE_CHECK",
+    "schema": "HR",
+    "table_name": "ACCOUNT",
+    "timing": "AFTER",
+    "events": ["UPDATE"],
+    "row_level": true
+  },
+  {
+    "id": "package_body",
+    "kind": "PACKAGE BODY",
+    "name": "PKG_BANK",
+    "schema": "HR"
+  },
+  {
+    "id": "nested_subprogram",
+    "kind": "PROCEDURE",
+    "name": "OUTER_PROC",
+    "schema": "HR"
+  },
+  {
+    "id": "bulk_collect",
+    "kind": "PROCEDURE",
+    "name": "GET_EMPLOYEE_IDS",
+    "schema": "HR"
+  },
+  {
+    "id": "dbms_calls",
+    "kind": "PROCEDURE",
+    "name": "UTIL_CALLS",
+    "schema": "HR"
+  },
+  {
+    "id": "connect_by",
+    "kind": "PROCEDURE",
+    "name": "PRINT_ORG_CHART",
+    "schema": "HR"
+  }
+]

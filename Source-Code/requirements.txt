@@ -1,0 +1,17 @@
+PySide6-Essentials>=6.6
+oracledb>=2.0
+psycopg[binary]>=3.1
+mysql-connector-python>=8.3
+pyodbc>=5.1  # SQL Server target; also requires a Microsoft ODBC Driver 17/18 for SQL Server installed on the machine
+ibm_db>=3.2  # Db2 (LUW) target; bundles its own Db2 client libraries, no separate OS-level driver needed
+pymongo>=4.6  # MongoDB target; speaks the wire protocol directly, no separate OS-level driver needed
+antlr4-python3-runtime==4.13.2  # grammar-based Oracle PL/SQL parser (tgdatabridge/core/plsql_ast.py); a vendored copy also ships in tgdatabridge/plsql_grammar/vendor/ as an offline fallback if this isn't installed
+asyncssh>=2.14  # SSH tunnel to a database with no direct route -- an AWS RDS instance in a private subnet reached through a bastion/jump host (tgdatabridge/db/ssh_tunnel.py). Pure Python on top of `cryptography`. Optional: without it the tool falls back to the system `ssh` client, which handles key auth but not password auth.
+cryptography>=41.0  # encrypts the AI provider API key at rest (tgdatabridge/utils/ai_settings.py); already an existing transitive dependency of asyncssh above, listed here directly now that ai_settings.py imports it itself. Optional in the sense that AI features are entirely opt-in: if this is ever unavailable, the API key is simply not persisted (re-entered each time) rather than falling back to plain text.
+openpyxl>=3.1  # Excel/CSV source engine (tgdatabridge/db/spreadsheet_connector.py); only needed for .xlsx/.xlsm files -- .csv/.tsv sources work with the standard library alone
+
+# Optional -- only needed by migrate_cli.py (the headless CLI, see
+# ENTERPRISE_READINESS.md section 5) if you want to write config files as
+# .yaml/.yml instead of .json. JSON config files always work with zero
+# extra install; uncomment this if you want YAML too.
+# pyyaml>=6.0

@@ -1,0 +1,230 @@
+/* Teleglobal Database Migration Tool — light blue theme */
+
+QMainWindow, QDialog {
+    background: #eaf3fb;
+}
+
+QWidget {
+    background: #eaf3fb;
+    color: #1c3a52;
+    font-size: 13px;
+}
+
+/* ---- Toolbar ---- */
+QToolBar {
+    background: #d5e9f9;
+    border-bottom: 1px solid #a9cfe8;
+    padding: 6px;
+    spacing: 6px;
+}
+
+QToolBar QLabel {
+    background: transparent;
+    color: #1c3a52;
+    font-weight: 600;
+}
+
+/* ---- Connection badges + status indicator (always-visible state) ---- */
+QLabel {
+    background: transparent;
+}
+
+ConnectionBadge {
+    background: #ffffff;
+    border: 1px solid #c3ddf1;
+    border-radius: 5px;
+}
+
+/* ---- Buttons ---- */
+QPushButton {
+    background: #ffffff;
+    color: #1c5a91;
+    border: 1px solid #a9cfe8;
+    border-radius: 5px;
+    padding: 6px 14px;
+    font-weight: 600;
+}
+
+QPushButton:hover {
+    background: #e3f1fc;
+    border: 1px solid #6fa8d8;
+}
+
+QPushButton:pressed {
+    background: #c9e4f7;
+}
+
+QPushButton:disabled {
+    background: #f2f6fa;
+    color: #9db4c4;
+    border: 1px solid #d7e5f0;
+}
+
+/* ---- Inputs ---- */
+QLineEdit, QSpinBox, QComboBox {
+    background: #ffffff;
+    border: 1px solid #b9d7ee;
+    border-radius: 4px;
+    padding: 4px 6px;
+    color: #1c3a52;
+    selection-background-color: #a9d4f5;
+}
+
+QLineEdit:focus, QSpinBox:focus, QComboBox:focus {
+    border: 1px solid #4a90d9;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 20px;
+}
+
+QComboBox QAbstractItemView {
+    background: #ffffff;
+    border: 1px solid #b9d7ee;
+    selection-background-color: #cfe8fb;
+    selection-color: #12324a;
+}
+
+/* ---- Panels: tree, tabs, text views ---- */
+QSplitter::handle {
+    background: #c3ddf1;
+}
+
+QTreeWidget, QPlainTextEdit, QTextBrowser {
+    background: #ffffff;
+    border: 1px solid #c3ddf1;
+    border-radius: 4px;
+    alternate-background-color: #f3f9fd;
+    color: #1c3a52;
+}
+
+QTreeWidget::item {
+    padding: 3px;
+}
+
+QTreeWidget::item:selected {
+    background: #cfe8fb;
+    color: #0f3253;
+}
+
+QHeaderView::section {
+    background: #d5e9f9;
+    color: #1c3a52;
+    padding: 5px;
+    border: none;
+    border-bottom: 1px solid #a9cfe8;
+    font-weight: 600;
+}
+
+/* ---- Tabs (DDL / Assessment Report) ---- */
+QTabWidget::pane {
+    border: 1px solid #c3ddf1;
+    border-radius: 4px;
+    background: #ffffff;
+    top: -1px;
+}
+
+QTabBar::tab {
+    background: #d5e9f9;
+    color: #1c3a52;
+    padding: 7px 18px;
+    border: 1px solid #a9cfe8;
+    border-bottom: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    margin-right: 2px;
+}
+
+QTabBar::tab:selected {
+    background: #ffffff;
+    font-weight: 600;
+}
+
+QTabBar::tab:hover {
+    background: #eaf3fb;
+}
+
+/* ---- Status bar / progress ---- */
+QStatusBar {
+    background: #d5e9f9;
+    border-top: 1px solid #a9cfe8;
+    color: #1c3a52;
+}
+
+QProgressBar {
+    background: #ffffff;
+    border: 1px solid #a9cfe8;
+    border-radius: 4px;
+    text-align: center;
+    color: #1c3a52;
+}
+
+QProgressBar::chunk {
+    background: #4a90d9;
+    border-radius: 3px;
+}
+
+/* ---- Scrollbars ---- */
+QScrollBar:vertical, QScrollBar:horizontal {
+    background: #eaf3fb;
+    border: none;
+    width: 12px;
+    height: 12px;
+}
+
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background: #a9cfe8;
+    border-radius: 5px;
+    min-height: 20px;
+    min-width: 20px;
+}
+
+QScrollBar::handle:vertical:hover, QScrollBar::handle:horizontal:hover {
+    background: #6fa8d8;
+}
+
+QScrollBar::add-line, QScrollBar::sub-line {
+    height: 0px;
+    width: 0px;
+}
+
+/* ---- Message boxes / dialog buttons ---- */
+QMessageBox {
+    background: #eaf3fb;
+}
+
+QDialogButtonBox QPushButton {
+    min-width: 80px;
+}
+
+/* ---- "How to reach it" radio buttons (connection dialog) ----
+   Qt's native indicator for a *selected* radio is a small dot that, on
+   some Windows themes with this palette, is nearly invisible -- and the
+   public/private choice is the one that decides whether a connection can
+   work at all. Drawn explicitly so the selected option is unmistakable.
+   Deliberately scoped to QRadioButton: QCheckBox is left native so the
+   tick everyone already recognises stays where it is. */
+QRadioButton {
+    spacing: 8px;
+    padding: 2px 0;
+}
+
+QRadioButton::indicator {
+    width: 15px;
+    height: 15px;
+    border: 1px solid #7fb3dd;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+QRadioButton::indicator:hover {
+    border: 1px solid #4a90d9;
+}
+
+QRadioButton::indicator:checked {
+    border: 1px solid #1f6fb2;
+    background: qradialgradient(cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5,
+                                stop:0 #1f6fb2, stop:0.5 #1f6fb2,
+                                stop:0.55 #ffffff, stop:1 #ffffff);
+}

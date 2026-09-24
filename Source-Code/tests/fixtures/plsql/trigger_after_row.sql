@@ -1,0 +1,5 @@
+BEGIN
+  IF :NEW.BALANCE < 0 THEN
+    DBMS_OUTPUT.PUT_LINE('Account overdrawn: ' || :NEW.ACCOUNT_ID);
+  END IF;
+END;
